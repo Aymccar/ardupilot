@@ -26,6 +26,10 @@ It is continually being expanded to provide support for new emerging vehicle typ
 ## Fork
 This fork is made to support a custom implementation of ROS. The objectif is to publish exactly what ardupilot is doing on ROS topics by defining custom librairies (motors, light, ...).
 
+```bash
+./waf configure --board ros --toolchain native
+./waf sub (for ArduSub)
+```
 ## The ArduPilot project is made up of: ##
 
 - ArduCopter: [code](https://github.com/ArduPilot/ardupilot/tree/master/ArduCopter), [wiki](https://ardupilot.org/copter/index.html)
