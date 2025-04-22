@@ -23,6 +23,9 @@ It has been under development since 2010 by a diverse team of professional engin
 Our autopilot software is capable of controlling almost any vehicle system imaginable, from conventional airplanes, quad planes, multi-rotors, and helicopters to rovers, boats, balance bots, and even submarines.
 It is continually being expanded to provide support for new emerging vehicle types.
 
+## Fork
+This fork is made to support a custom implementation of ROS. The objectif is to publish exactly what ardupilot is doing on ROS topics by defining custom librairies (motors, light, ...).
+
 ## The ArduPilot project is made up of: ##
 
 - ArduCopter: [code](https://github.com/ArduPilot/ardupilot/tree/master/ArduCopter), [wiki](https://ardupilot.org/copter/index.html)
