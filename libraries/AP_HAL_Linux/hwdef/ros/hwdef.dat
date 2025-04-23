@@ -1,7 +1,15 @@
 # A ROS pluggable board made to be run with blueOS
 #define INS_MAX_INSTANCES 3
 
+# IMUs : None for the moment will be ROS
+#IMU NONE 1000 1000
+#define INS_MAX_INSTANCE 1
+
+# Baros : None for the moment will be ROS
+BARO Dummy
+
+
 define HAL_LINUX_GPIO_RPI_ENABLED 0
 
-
+// Used in BlueOS so needed
 define CONFIG_HAL_BOARD_SUBTYPE HAL_BOARD_SUBTYPE_LINUX_ROS

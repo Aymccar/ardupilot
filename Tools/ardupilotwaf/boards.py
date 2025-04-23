@@ -1436,7 +1436,7 @@ class linux(Board):
             env.CXXFLAGS += [
                 '-O3',
             ]
-
+        cfg.env.INCLUDES += ['/opt/ros/jazzy/include/rclcpp']
         env.LIB += [
             'm',
         ]
@@ -1491,6 +1491,16 @@ class linux(Board):
             env.DEFINES.update(
                 HAL_PARAM_DEFAULTS_PATH='"@ROMFS/defaults.parm"',
             )
+        
+        cfg.env.LINKFLAGS += [
+            '-lrclcpp',  # Add rclcpp
+            '-lrcl',      # Core ROS client library
+            '-lrcutils',  # Utility library for ROS 2
+            '-lrosidl_runtime_c',  # ROS 2 message runtime
+            '-lrosidl_typesupport_cpp',
+            '-lrosidl_typesupport_fastrtps_cpp',
+            #'-lrmw_fastrtps_cpp',  # Middleware (adjust if using a different RMW)
+        ]
 
     def pre_build(self, bld):
         '''pre-build hook that gets called before dynamic sources'''
