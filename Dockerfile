@@ -1,6 +1,7 @@
 ARG BASE_IMAGE="ubuntu"
 ARG TAG="22.04"
 FROM ${BASE_IMAGE}:${TAG}
+FROM ros:humble-ros-core
 WORKDIR /ardupilot
 
 ARG DEBIAN_FRONTEND=noninteractive

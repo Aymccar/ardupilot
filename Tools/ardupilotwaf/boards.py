@@ -1436,7 +1436,13 @@ class linux(Board):
             env.CXXFLAGS += [
                 '-O3',
             ]
-        cfg.env.INCLUDES += ['/opt/ros/jazzy/include/rclcpp']
+        ros_distro = os.environ.get('ROS_DISTRO', 'no_ros_distro')
+        if ros_distro == 'no_ros_distro':
+            raise RuntimeError("ROS_DISTRO not set in environment. Please source your ROS setup.bash.")
+        ros_dir = os.listdir(f"/opt/ros/{ros_distro}/include/")
+        ros_dir = [f"/opt/ros/{ros_distro}/include/"+path for path in ros_dir]
+        cfg.env.INCLUDES += ros_dir 
+
         env.LIB += [
             'm',
         ]
