@@ -351,11 +351,11 @@ class Board:
             env.PRIVATE_KEY = cfg.options.private_key
             
         env.CXXFLAGS += [
-            '-std=gnu++11',
+            '-std=c++17',
 
             '-fdata-sections',
             '-ffunction-sections',
-            '-fno-exceptions',
+            #'-fno-exceptions',
             '-fsigned-char',
 
             '-Wall',
@@ -1440,9 +1440,9 @@ class linux(Board):
         if ros_distro == 'no_ros_distro':
             raise RuntimeError("ROS_DISTRO not set in environment. Please source your ROS setup.bash.")
         ros_dir = os.listdir(f"/opt/ros/{ros_distro}/include/")
-        ros_dir = [f"/opt/ros/{ros_distro}/include/"+path for path in ros_dir]
-        cfg.env.INCLUDES += ros_dir 
+        ros_flags = [f"-isystem/opt/ros/{ros_distro}/include/"+path for path in ros_dir]
 
+        cfg.env.CXXFLAGS += ros_flags 
         env.LIB += [
             'm',
         ]
@@ -1498,15 +1498,17 @@ class linux(Board):
                 HAL_PARAM_DEFAULTS_PATH='"@ROMFS/defaults.parm"',
             )
         
+        ros_distro = os.environ.get('ROS_DISTRO', 'no_ros_distro')
+        if ros_distro == 'no_ros_distro':
+            raise RuntimeError("ROS_DISTRO not set in environment. Please source your ROS setup.bash.")
+        ros_libs = os.listdir(f"/opt/ros/{ros_distro}/lib/")
+        ros_flags = ["-l" + libs[3:] for libs in ros_libs if libs[0:3] == 'lib'for libs in ros_libs]
+
         cfg.env.LINKFLAGS += [
-            '-lrclcpp',  # Add rclcpp
-            '-lrcl',      # Core ROS client library
-            '-lrcutils',  # Utility library for ROS 2
-            '-lrosidl_runtime_c',  # ROS 2 message runtime
-            '-lrosidl_typesupport_cpp',
-            '-lrosidl_typesupport_fastrtps_cpp',
-            #'-lrmw_fastrtps_cpp',  # Middleware (adjust if using a different RMW)
+            f"-L/opt/ros/{ros_distro}/lib/"
         ]
+        cfg.env.LINKFLAGS += ros_flags
+
 
     def pre_build(self, bld):
         '''pre-build hook that gets called before dynamic sources'''
