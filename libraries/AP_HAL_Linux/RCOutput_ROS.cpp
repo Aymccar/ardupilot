@@ -1,18 +1,14 @@
 #include "RCOutput_ROS.h"
 #include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/string.hpp>
+#include <vector>
 
 #define PWM_CHAN_COUNT 16
 
-// TODO :
-// Why channel offset
-// define correctly the constructor 
-
 using namespace Linux;
 
-RCOutput_ROS::RCOutput_ROS()
-{
-    // Init ros topic or node here ?
-}
+RCOutput_ROS::RCOutput_ROS():
+    _pulse_buffer(NEW_NOTHROW uint16_t[PWM_CHAN_COUNT]){}
 
 RCOutput_ROS::~RCOutput_ROS()
 {
@@ -22,7 +18,8 @@ RCOutput_ROS::~RCOutput_ROS()
 void RCOutput_ROS::init()
 {
     set_freq(0, 50);
-    // Init ros topic or node here ?
+    node = std::make_shared<rclcpp::Node>("Motor Driver");
+    publisher = node->create_publisher<std_msgs::msg::String>("PWM", 1);
 }
 
 void RCOutput_ROS::set_freq(uint32_t chmask, uint16_t freq_hz)
@@ -68,7 +65,11 @@ void RCOutput_ROS::push(){
     }
     _corking = false;
 
-    //Push on ROS topic
+    std_msgs::msg::String message;
+    //message.data = std::vector<uint16_t>(_pulse_buffer, _pulse_buffer + PWM_CHAN_COUNT);
+    message.data = "OK";
+    publisher->publish(message);
+
 }
 
 uint16_t RCOutput_ROS::read(uint8_t chan)

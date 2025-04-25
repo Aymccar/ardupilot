@@ -1,6 +1,8 @@
 #pragma once
-
 #include "AP_HAL_Linux.h"
+
+#include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/string.hpp>
 
 namespace Linux {
 
@@ -30,6 +32,10 @@ private:
         uint16_t _freq;
         bool _corking;
         uint16_t* _pulse_buffer;
+
+        rclcpp::Node::SharedPtr node;
+        rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher;
+
 
 };
 }
