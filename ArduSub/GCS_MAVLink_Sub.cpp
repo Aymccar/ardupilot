@@ -891,10 +891,7 @@ void GCS_MAVLINK_Sub::handle_message(const mavlink_message_t &msg)
 	mavlink_msg_named_value_float_decode(&msg, &p);
         gcs().send_text(MAV_SEVERITY_INFO, "Val %s set to %f at ts %d", p.name, p.value, p.time_boot_ms);
 
-	// UW functions
-	// Placeholder to test
-	sub.gain = p.value; 
-
+        // UW functions maybe another file ?
   	break;
      }	
 
