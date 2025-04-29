@@ -1443,6 +1443,8 @@ class linux(Board):
         ros_flags = [f"-isystem/opt/ros/{ros_distro}/include/"+path for path in ros_dir]
 
         cfg.env.CXXFLAGS += ros_flags 
+        cfg.env.CXXFLAGS += [f"-I{os.path.abspath('colcon_ws/src/wafros2bridge/include')}"]
+        
         env.LIB += [
             'm',
         ]
@@ -1497,17 +1499,6 @@ class linux(Board):
             env.DEFINES.update(
                 HAL_PARAM_DEFAULTS_PATH='"@ROMFS/defaults.parm"',
             )
-        
-        ros_distro = os.environ.get('ROS_DISTRO', 'no_ros_distro')
-        if ros_distro == 'no_ros_distro':
-            raise RuntimeError("ROS_DISTRO not set in environment. Please source your ROS setup.bash.")
-        ros_libs = os.listdir(f"/opt/ros/{ros_distro}/lib/")
-        ros_flags = ["-l" + libs[3:] for libs in ros_libs if libs[0:3] == 'lib'for libs in ros_libs]
-
-        cfg.env.LINKFLAGS += [
-            f"-L/opt/ros/{ros_distro}/lib/"
-        ]
-        cfg.env.LINKFLAGS += ros_flags
 
 
     def pre_build(self, bld):
@@ -1522,6 +1513,10 @@ class linux(Board):
     def build(self, bld):
         super(linux, self).build(bld)
         bld.load('linux')
+        
+        bld.env.LIB += ["wafros2bridge"]
+        bld.env.LIBPATH += [f"{os.path.abspath('colcon_ws/install/wafros2bridge/lib')}"]
+        
         if bld.options.upload:
             waflib.Options.commands.append('rsync')
             # Avoid infinite recursion

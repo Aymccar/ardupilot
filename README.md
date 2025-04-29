@@ -26,6 +26,14 @@ It is continually being expanded to provide support for new emerging vehicle typ
 ## Fork
 This fork is made to support a custom implementation of ROS. The objectif is to publish exactly what ardupilot is doing on ROS topics by defining custom librairies (motors, light, ...).
 
+### Build ROS Bridge
+```bash
+cd colcon_ws
+colcon build
+```
+
+Then build ardupilot
+
 ```bash
 ./waf configure --board ros --toolchain native
 ./waf sub (for ArduSub)

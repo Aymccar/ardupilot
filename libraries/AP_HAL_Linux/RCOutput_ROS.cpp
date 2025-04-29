@@ -1,6 +1,6 @@
 #include "RCOutput_ROS.h"
-#include <rclcpp/rclcpp.hpp>
-#include <std_msgs/msg/string.hpp>
+#include <bridge_node.hpp>
+#include <bridge_publisher_string.hpp>
 #include <vector>
 
 #define PWM_CHAN_COUNT 16
@@ -8,7 +8,10 @@
 using namespace Linux;
 
 RCOutput_ROS::RCOutput_ROS():
-    _pulse_buffer(NEW_NOTHROW uint16_t[PWM_CHAN_COUNT]){}
+    _pulse_buffer(NEW_NOTHROW uint16_t[PWM_CHAN_COUNT]),
+    node("Motor Driver"),
+    publisher("PWM", 1, node)
+{}
 
 RCOutput_ROS::~RCOutput_ROS()
 {
@@ -18,8 +21,6 @@ RCOutput_ROS::~RCOutput_ROS()
 void RCOutput_ROS::init()
 {
     set_freq(0, 50);
-    node = std::make_shared<rclcpp::Node>("Motor Driver");
-    publisher = node->create_publisher<std_msgs::msg::String>("PWM", 1);
 }
 
 void RCOutput_ROS::set_freq(uint32_t chmask, uint16_t freq_hz)
@@ -65,10 +66,7 @@ void RCOutput_ROS::push(){
     }
     _corking = false;
 
-    std_msgs::msg::String message;
-    //message.data = std::vector<uint16_t>(_pulse_buffer, _pulse_buffer + PWM_CHAN_COUNT);
-    message.data = "OK";
-    publisher->publish(message);
+    publisher.publish("OK");
 
 }
 
