@@ -686,12 +686,12 @@ void GCS_MAVLINK_Sub::handle_message(const mavlink_message_t &msg)
         sub.failsafe.last_pilot_input_ms = AP_HAL::millis();
         // a RC override message is considered to be a 'heartbeat'
         // from the ground station for failsafe purposes
-        
+
         handle_rc_channels_override(msg);
         break;
     }
 
-    
+
     case MAVLINK_MSG_ID_SET_ATTITUDE_TARGET: { // MAV ID: 82
         // decode packet
         mavlink_set_attitude_target_t packet;
@@ -887,13 +887,37 @@ void GCS_MAVLINK_Sub::handle_message(const mavlink_message_t &msg)
         break;
 
     case MAVLINK_MSG_ID_NAMED_VALUE_FLOAT: {
-	mavlink_named_value_float_t p;
-	mavlink_msg_named_value_float_decode(&msg, &p);
+        mavlink_named_value_float_t p;
+        mavlink_msg_named_value_float_decode(&msg, &p);
         gcs().send_text(MAV_SEVERITY_INFO, "Val %s set to %f at ts %d", p.name, p.value, p.time_boot_ms);
 
-        // UW functions maybe another file ?
+        const char UW_LIGHTS_1[10] = {'U','W','_','L','I','G','H','T','1','\0'};
+        const uint8_t UW_LIGHTS_1_PWM = 8;
+        const uint16_t UW_LIGHTS_1_MIN = 0;
+        const uint16_t UW_LIGHTS_1_MAX = 1000;
+
+        const char UW_LIGHTS_2[10] = {'U','W','_','L','I','G','H','T','2','\0'};
+        const uint8_t UW_LIGHTS_2_PWM = 9;
+        const uint16_t UW_LIGHTS_2_MIN = 0;
+        const uint16_t UW_LIGHTS_2_MAX = 1000;
+
+        const char UW_GAIN[10] = {'U','W','_','G','A','I','N','\0','\0','\0'};
+        const float UW_GAIN_MIN = 0.1;
+        const float UW_GAIN_MAX = 0.8;
+
+        uint32_t tnow = AP_HAL::millis();
+
+        if (strncmp(p.name, UW_LIGHTS_1, sizeof(UW_LIGHTS_1)) == 0){
+            RC_Channels::set_override(UW_LIGHTS_1_PWM, constrain_uint16((uint16_t)p.value, UW_LIGHTS_1_MIN, UW_LIGHTS_1_MAX), tnow);
+        }
+        else if (strncmp(p.name, UW_LIGHTS_2, sizeof(UW_LIGHTS_2)) == 0){
+            RC_Channels::set_override(UW_LIGHTS_2_PWM, constrain_uint16((uint16_t)p.value, UW_LIGHTS_2_MIN, UW_LIGHTS_2_MAX), tnow);
+        }
+        else if (strncmp(p.name, UW_GAIN, sizeof(UW_GAIN)) == 0){
+            sub.gain = constrain_float(p.value, UW_GAIN_MIN, UW_GAIN_MAX);
+        }
   	break;
-     }	
+     }
 
     default:
         GCS_MAVLINK::handle_message(msg);
@@ -947,7 +971,7 @@ int16_t GCS_MAVLINK_Sub::high_latency_target_altitude() const
         return 0.01 * (global_position_current.alt + sub.pos_control.get_pos_error_z_cm());
     }
     return 0;
-    
+
 }
 
 uint8_t GCS_MAVLINK_Sub::high_latency_tgt_heading() const
@@ -957,9 +981,9 @@ uint8_t GCS_MAVLINK_Sub::high_latency_tgt_heading() const
         // need to convert -18000->18000 to 0->360/2
         return wrap_360_cd(sub.wp_nav.get_wp_bearing_to_destination()) / 200;
     }
-    return 0;      
+    return 0;
 }
-    
+
 uint16_t GCS_MAVLINK_Sub::high_latency_tgt_dist() const
 {
     // return units are dm
