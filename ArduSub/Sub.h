@@ -295,6 +295,8 @@ private:
     // Flag indicating if we are currently controlling Pitch and Roll instead of forward/lateral
     bool roll_pitch_flag = false;
 
+    int16_t pitchTrim = 0; // Moved from joystick to be updated by GCS and named float
+
     // 3D Location vectors
     // Current location of the Sub (altitude is relative to home)
     Location current_loc;
