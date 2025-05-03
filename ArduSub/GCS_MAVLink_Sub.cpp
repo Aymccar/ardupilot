@@ -891,29 +891,13 @@ void GCS_MAVLINK_Sub::handle_message(const mavlink_message_t &msg)
         mavlink_msg_named_value_float_decode(&msg, &p);
         gcs().send_text(MAV_SEVERITY_INFO, "Val %s set to %f at ts %d", p.name, p.value, p.time_boot_ms);
 
-        const char UW_LIGHTS_1[10] = {'U','W','_','L','I','G','H','T','1','\0'};
-        const uint8_t UW_LIGHTS_1_PWM = 8;
-        const uint16_t UW_LIGHTS_1_MIN = 0;
-        const uint16_t UW_LIGHTS_1_MAX = 1000;
-
-        const char UW_LIGHTS_2[10] = {'U','W','_','L','I','G','H','T','2','\0'};
-        const uint8_t UW_LIGHTS_2_PWM = 9;
-        const uint16_t UW_LIGHTS_2_MIN = 0;
-        const uint16_t UW_LIGHTS_2_MAX = 1000;
-
         const char UW_GAIN[10] = {'U','W','_','G','A','I','N','\0','\0','\0'};
         const float UW_GAIN_MIN = 0.1;
         const float UW_GAIN_MAX = 0.8;
 
         uint32_t tnow = AP_HAL::millis();
 
-        if (strncmp(p.name, UW_LIGHTS_1, sizeof(UW_LIGHTS_1)) == 0){
-            RC_Channels::set_override(UW_LIGHTS_1_PWM, constrain_uint16((uint16_t)p.value, UW_LIGHTS_1_MIN, UW_LIGHTS_1_MAX), tnow);
-        }
-        else if (strncmp(p.name, UW_LIGHTS_2, sizeof(UW_LIGHTS_2)) == 0){
-            RC_Channels::set_override(UW_LIGHTS_2_PWM, constrain_uint16((uint16_t)p.value, UW_LIGHTS_2_MIN, UW_LIGHTS_2_MAX), tnow);
-        }
-        else if (strncmp(p.name, UW_GAIN, sizeof(UW_GAIN)) == 0){
+        if (strncmp(p.name, UW_GAIN, sizeof(UW_GAIN)) == 0){
             sub.gain = constrain_float(p.value, UW_GAIN_MIN, UW_GAIN_MAX);
         }
   	break;
