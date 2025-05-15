@@ -1420,7 +1420,6 @@ class linux(Board):
         super(linux, self).configure(cfg)
 
     def configure_env(self, cfg, env):
-
         if cfg.options.board == 'linux':
             self.with_can = True
         super(linux, self).configure_env(cfg, env)
@@ -1443,8 +1442,12 @@ class linux(Board):
         ros_flags = [f"-isystem/opt/ros/{ros_distro}/include/"+path for path in ros_dir]
 
         cfg.env.CXXFLAGS += ros_flags 
-        cfg.env.CXXFLAGS += [f"-I{os.path.abspath('colcon_ws/src/wafros2bridge/include')}"]
-        
+        env.wafrosbridge_include_path = cfg.options.wafrosbridge_include_path
+        env.wafrosbridge_lib_path = cfg.options.wafrosbridge_lib_path
+
+        if env.wafrosbridge_lib_path != "":
+            cfg.env.CXXFLAGS += [f"-I{env.wafrosbridge_include_path}"]         
+
         env.LIB += [
             'm',
         ]
@@ -1514,9 +1517,11 @@ class linux(Board):
         super(linux, self).build(bld)
         bld.load('linux')
         
-        bld.env.LIB += ["wafros2bridge"]
-        bld.env.LIBPATH += [f"{os.path.abspath('colcon_ws/install/wafros2bridge/lib')}"]
-        
+        if bld.env.wafrosbridge_lib_path != "":
+            bld.env.LIB += ["wafros2bridge"]
+
+            bld.env.LIBPATH += [bld.env.wafrosbridge_lib_path]        
+
         if bld.options.upload:
             waflib.Options.commands.append('rsync')
             # Avoid infinite recursion

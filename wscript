@@ -311,6 +311,14 @@ submodules at specific revisions.
                  default=False,
                  help="Enable littlefs for filesystem access on SITL (under construction)")
 
+    g.add_option('--wafrosbridge_include_path', action='store',
+                 default="COUCOU",
+                 help="Path of wafrosbridge include")
+
+    g.add_option('--wafrosbridge_lib_path', action='store',
+                 default="",
+                 help="Path of wafrosbridge lib")
+
     g = opt.ap_groups['linux']
 
     linux_options = ('--prefix', '--destdir', '--bindir', '--libdir')
