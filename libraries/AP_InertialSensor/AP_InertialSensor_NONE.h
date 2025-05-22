@@ -7,7 +7,7 @@
  Its a rip-off of _SITL with all the sitl stuff removed or replaced with constants.
 */
 
-#if CONFIG_HAL_BOARD == HAL_BOARD_ESP32
+//#if CONFIG_HAL_BOARD == HAL_BOARD_ESP32
 #include "AP_InertialSensor.h"
 #include "AP_InertialSensor_Backend.h"
 
@@ -26,6 +26,7 @@ public:
     void accumulate() override;
     // detect the sensor
     static AP_InertialSensor_Backend *detect(AP_InertialSensor &imu, const uint16_t sample_rates[]);
+    static AP_InertialSensor_Backend *probe(AP_InertialSensor &imu, int f);
 
 private:
     bool init_sensor(void);
@@ -52,4 +53,4 @@ private:
 
     static uint8_t bus_id;
 };
-#endif // CONFIG_HAL_BOARD
+//#endif // CONFIG_HAL_BOARD

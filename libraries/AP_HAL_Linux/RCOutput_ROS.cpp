@@ -1,26 +1,40 @@
 #include "RCOutput_ROS.h"
+
+#include <bridge_server.hpp>
 #include <bridge_node.hpp>
-#include <bridge_publisher_string.hpp>
-#include <vector>
+
+#include <iostream>
+#include <stdexcept>
+#include <stdio.h>
+#include <unistd.h>
 
 #define PWM_CHAN_COUNT 16
 
 using namespace Linux;
 
 RCOutput_ROS::RCOutput_ROS():
-    _pulse_buffer(NEW_NOTHROW uint16_t[PWM_CHAN_COUNT]),
-    node("Motor Driver"),
-    publisher("PWM", 1, node)
-{}
-
+    _pulse_buffer(NEW_NOTHROW uint16_t[PWM_CHAN_COUNT])
+{
+}
 RCOutput_ROS::~RCOutput_ROS()
 {
-    //Maybe delete something in ROS idk
+    //TODO should shutdown ros 
 }
 
 void RCOutput_ROS::init()
 {
     set_freq(0, 50);
+
+    //ROS things
+    BridgeServer::init();
+    node = new BridgeNode("Motor_Driver");
+    publisher = node->create_publisher_array("PWM", 10);
+
+    auto file_ptr= fopen("out.txt", "w");
+    dup2(fileno(file_ptr), fileno(stderr));
+    std::cerr<<"Init"<<std::endl;
+    fclose(file_ptr);
+
 }
 
 void RCOutput_ROS::set_freq(uint32_t chmask, uint16_t freq_hz)
@@ -47,8 +61,15 @@ void RCOutput_ROS::disable_ch(uint8_t ch)
     write(ch, 0);
 }
 
+void RCOutput_ROS::write_gpio(uint8_t ch, bool active){
+    write(ch, active);
+}
+
+
 void RCOutput_ROS::write(uint8_t ch, uint16_t period_us)
 {
+    _pulse_buffer[ch] = period_us;
+
     if (!_corking) {
         _corking = true;
         push();
@@ -61,13 +82,15 @@ void RCOutput_ROS::cork()
 }
 
 void RCOutput_ROS::push(){
-    if (!_corking){
+    
+    if (!_corking) {
         return;
     }
+
     _corking = false;
-
-    publisher.publish("OK");
-
+    if (publisher){
+        publisher->publish(_pulse_buffer, PWM_CHAN_COUNT);
+    }
 }
 
 uint16_t RCOutput_ROS::read(uint8_t chan)
@@ -79,6 +102,6 @@ uint16_t RCOutput_ROS::read(uint8_t chan)
 void RCOutput_ROS::read(uint16_t* period_us, uint8_t len)
 {
     for (int i = 0; i < len; i++) {
-        period_us[i] = read(0 + i);
+        period_us[i] = read(i);
     }
 }

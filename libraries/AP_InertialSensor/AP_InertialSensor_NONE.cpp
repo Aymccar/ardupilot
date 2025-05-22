@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <GCS_MAVLink/GCS.h>
 
-#if CONFIG_HAL_BOARD == HAL_BOARD_ESP32
+//#if CONFIG_HAL_BOARD == HAL_BOARD_ESP32
 
 
 static float sim_rand_float(void)
@@ -27,6 +27,21 @@ AP_InertialSensor_NONE::AP_InertialSensor_NONE(AP_InertialSensor &imu, const uin
 AP_InertialSensor_Backend *AP_InertialSensor_NONE::detect(AP_InertialSensor &_imu, const uint16_t sample_rates[])
 {
     AP_InertialSensor_NONE *sensor = NEW_NOTHROW AP_InertialSensor_NONE(_imu, sample_rates);
+    if (sensor == nullptr) {
+
+        return nullptr;
+    }
+    if (!sensor->init_sensor()) {
+        delete sensor;
+
+        return nullptr;
+    }
+    return sensor;
+}
+
+AP_InertialSensor_Backend *AP_InertialSensor_NONE::probe(AP_InertialSensor &_imu, int f)
+{
+    AP_InertialSensor_NONE *sensor = NEW_NOTHROW AP_InertialSensor_NONE(_imu, INS_NONE_SENSOR_A);
     if (sensor == nullptr) {
 
         return nullptr;
@@ -317,4 +332,4 @@ void AP_InertialSensor_NONE::start()
 
 }
 
-#endif // HAL_BOARD_NONE
+//#endif // HAL_BOARD_NONE

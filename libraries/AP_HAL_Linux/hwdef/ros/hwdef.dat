@@ -1,9 +1,9 @@
-# A ROS pluggable board made to be run with blueOS
+# A ROS pluggable board made to be run with blueOS from BlueRobotics
 #define INS_MAX_INSTANCES 3
 
 # IMUs : None for the moment will be ROS
-#IMU NONE 1000 1000
-#define INS_MAX_INSTANCE 1
+IMU NONE 1000
+define INS_MAX_INSTANCE 1
 
 # Baros : None for the moment will be ROS
 BARO Dummy
