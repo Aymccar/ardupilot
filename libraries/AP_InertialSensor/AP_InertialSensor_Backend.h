@@ -152,6 +152,8 @@ public:
         DEVTYPE_INS_ICM45686 = 0x3B,
         DEVTYPE_INS_SCHA63T  = 0x3C,
         DEVTYPE_INS_IIM42653 = 0x3D,
+        //Maybe useless
+        DEVTYPE_ROS      = 0x3F,
     };
 
 protected:

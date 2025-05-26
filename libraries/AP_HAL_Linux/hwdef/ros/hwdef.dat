@@ -2,7 +2,7 @@
 #define INS_MAX_INSTANCES 3
 
 # IMUs : None for the moment will be ROS
-IMU NONE 1000
+IMU ROS ROTATION_ROLL_180_YAW_270 #rotation is useless for the moment
 define INS_MAX_INSTANCE 1
 
 # Baros : None for the moment will be ROS
