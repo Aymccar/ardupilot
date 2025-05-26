@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include <bridge_server.hpp>
 #include <bridge_node.hpp>
 
 const extern AP_HAL::HAL& hal;

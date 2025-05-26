@@ -4,7 +4,6 @@
 
 #include <vector>
 
-#include <bridge_server.hpp>
 #include <bridge_node.hpp>
 
 class AP_InertialSensor_ROS : public AP_InertialSensor_Backend {
