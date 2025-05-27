@@ -15,13 +15,13 @@ AP_InertialSensor_ROS::AP_InertialSensor_ROS(AP_InertialSensor &imu, enum Rotati
     node = new BridgeNode("IMU");
 
     subscriber = node->create_subscriber_IMU("/bluerov/sensors/IMU", 5,
-            [this](user_msg_t msg){}); 
+            [this](IMU_msg_t msg){}); 
 }
 
 void AP_InertialSensor_ROS::get_from_topic(){
 
     node->spin_some();
-    user_msg_t msg = subscriber->get();
+    IMU_msg_t msg = subscriber->get();
    
     auto accel = Vector3f(msg.accel_x, msg.accel_y, msg.accel_z);
     _notify_new_accel_sensor_rate_sample(accel_instance, accel);

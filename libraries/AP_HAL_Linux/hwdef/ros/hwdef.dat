@@ -1,13 +1,10 @@
 # A ROS pluggable board made to be run with blueOS from BlueRobotics
 #define INS_MAX_INSTANCES 3
 
-# IMUs : None for the moment will be ROS
 IMU ROS ROTATION_ROLL_180_YAW_270 #rotation is useless for the moment
 define INS_MAX_INSTANCE 1
 
-# Baros : None for the moment will be ROS
-BARO Dummy
-
+BARO ROS
 
 define HAL_LINUX_GPIO_RPI_ENABLED 0
 

@@ -44,6 +44,7 @@
 #include "AP_Baro_FBM320.h"
 #include "AP_Baro_DPS280.h"
 #include "AP_Baro_Dummy.h"
+#include "AP_Baro_ROS.h"
 #include "AP_Baro_DroneCAN.h"
 #include "AP_Baro_MSP.h"
 #include "AP_Baro_ExternalAHRS.h"
