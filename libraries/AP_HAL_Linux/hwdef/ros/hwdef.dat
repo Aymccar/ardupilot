@@ -6,6 +6,8 @@ define INS_MAX_INSTANCE 1
 
 BARO ROS
 
+COMPASS ROS ROTATION_NONE
+
 define HAL_LINUX_GPIO_RPI_ENABLED 0
 
 // Used in BlueOS so needed

@@ -47,6 +47,7 @@
 #endif
 #include "AP_Compass.h"
 #include "Compass_learn.h"
+#include "AP_Compass_ROS.h"
 #include <stdio.h>
 
 extern const AP_HAL::HAL& hal;
