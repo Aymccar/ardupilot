@@ -27,14 +27,8 @@ void RCOutput_ROS::init()
 
     //ROS things
     BridgeServer::init();
-    node = new BridgeNode("Motor_Driver");
-    publisher = node->create_publisher_array("PWM", 10);
-
-    auto file_ptr= fopen("out.txt", "w");
-    dup2(fileno(file_ptr), fileno(stderr));
-    std::cerr<<"Init"<<std::endl;
-    fclose(file_ptr);
-
+    node = new BridgeNode("Motor_Driver", "Ardupilot");
+    publisher = node->create_publisher_array("/Sea/PWM", 10);
 }
 
 void RCOutput_ROS::set_freq(uint32_t chmask, uint16_t freq_hz)

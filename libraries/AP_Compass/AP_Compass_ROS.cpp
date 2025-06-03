@@ -1,5 +1,6 @@
 #include "AP_Compass_ROS.h"
 
+#include <bridge_server.hpp>
 #include <bridge_node.hpp>
 
 #if AP_COMPASS_ROS_ENABLED
@@ -27,18 +28,19 @@ bool AP_Compass_ROS::_init(){
     set_dev_id(_compass_instance, _dev_id);
     set_rotation(_compass_instance, _rotation);
 
-    node = new BridgeNode("Compass");
-    subscriber = node->create_subscriber_array("/Compass", 5, 
-            [this](array_msg_t msg){});
+    node = new BridgeNode("Compass", "Ardupilot");
+    subscriber = node->create_subscriber_array("/Sea/Compass", 5, 
+            [this](array_float_msg_t msg){});
+    BridgeServer::init();
     
     return true;
 }
 
 void AP_Compass_ROS::_update(){
     node->spin_some();
-    array_msg_t msg = subscriber->get();
+    array_float_msg_t msg = subscriber->get();
 
-    Vector3 field = {(float)msg.data[0], (float)msg.data[1], (float)msg.data[2]};
+    Vector3 field = {msg.data[0], msg.data[1], msg.data[2]};
     accumulate_sample(field, _compass_instance);
 }
 

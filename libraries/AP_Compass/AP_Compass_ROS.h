@@ -12,18 +12,19 @@ public:
     static AP_Compass_Backend* probe(enum Rotation rotation);
     void read() override;
 
+    static constexpr const char *name = "ROS_Compass";
+
 private:
     AP_Compass_ROS(enum Rotation rotation);
 
     void _update();
     bool _init();
     
-    AP_HAL::OwnPtr<AP_HAL::Device> _dev;
     Rotation _rotation;
     uint8_t _compass_instance;
 
     BridgeNode* node;
-    BridgeSubscriberArray* subscriber;
+    BridgeSubscriberArrayFloat* subscriber;
 
 };
 #endif

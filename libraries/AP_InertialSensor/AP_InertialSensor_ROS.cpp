@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include <bridge_server.hpp>
 #include <bridge_node.hpp>
 
 const extern AP_HAL::HAL& hal;
@@ -12,10 +13,12 @@ uint8_t AP_InertialSensor_ROS::bus_id = 0;
 AP_InertialSensor_ROS::AP_InertialSensor_ROS(AP_InertialSensor &imu, enum Rotation rotation):
     AP_InertialSensor_Backend(imu)
 {
-    node = new BridgeNode("IMU");
+    node = new BridgeNode("IMU", "Ardupilot");
 
     subscriber = node->create_subscriber_IMU("/bluerov/sensors/IMU", 5,
             [this](IMU_msg_t msg){}); 
+
+    BridgeServer::init();
 }
 
 void AP_InertialSensor_ROS::get_from_topic(){
