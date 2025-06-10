@@ -1,5 +1,7 @@
 #include "RCOutput_ROS.h"
 
+#if CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_ROS
+
 #include <bridge_server.hpp>
 #include <bridge_node.hpp>
 
@@ -99,3 +101,4 @@ void RCOutput_ROS::read(uint16_t* period_us, uint8_t len)
         period_us[i] = read(i);
     }
 }
+#endif

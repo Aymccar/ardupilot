@@ -1,14 +1,10 @@
-/*
-  ROS backend barometer. Used during board bringup. Selected using
-  BARO line in hwdef.dat
- */
 #pragma once
 
 #include "AP_Baro_Backend.h"
 
-#include <bridge_node.hpp> 
-
 #if AP_BARO_ROS_ENABLED
+
+#include <bridge_node.hpp> 
 
 class AP_Baro_ROS : public AP_Baro_Backend
 {

@@ -1,6 +1,8 @@
 #pragma once
 #include "AP_HAL_Linux.h"
 
+#if CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_ROS
+
 #include <bridge_node.hpp>
 
 namespace Linux {
@@ -37,3 +39,4 @@ private:
         BridgePublisherArray* publisher;
 };
 }
+#endif

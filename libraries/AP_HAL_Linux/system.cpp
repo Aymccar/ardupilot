@@ -67,7 +67,7 @@ uint64_t micros64()
 
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
-    return uint64_div1000(ts_to_nsec(ts) - state.start_time_ns);
+    return uint64_div1000(ts_to_nsec(ts) - state.start_time_ns)*SPEED_UP;
 }
 
 uint64_t millis64()

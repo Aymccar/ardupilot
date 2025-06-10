@@ -15,6 +15,8 @@
 #define AP_LINUX_SENSORS_SCHED_POLICY  SCHED_FIFO
 #define AP_LINUX_SENSORS_SCHED_PRIO 12
 
+#define SPEED_UP 4
+
 namespace Linux {
 
 class Scheduler : public AP_HAL::Scheduler {

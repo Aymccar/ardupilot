@@ -1,9 +1,9 @@
 #include "AP_Compass_ROS.h"
 
+#if AP_COMPASS_ROS_ENABLED
+
 #include <bridge_server.hpp>
 #include <bridge_node.hpp>
-
-#if AP_COMPASS_ROS_ENABLED
 
 const extern AP_HAL::HAL& hal;
 
@@ -20,7 +20,6 @@ AP_Compass_ROS::AP_Compass_ROS(enum Rotation rotation):
     _rotation(rotation){}
 
 bool AP_Compass_ROS::_init(){
-
     auto _dev_id = AP_HAL::Device::make_bus_id(AP_HAL::Device::BUS_TYPE_SITL, 1, 0, 0);
 
     register_compass(1, _compass_instance);
@@ -48,5 +47,4 @@ void AP_Compass_ROS::read(){
     _update();
     drain_accumulated_samples(_compass_instance);
 }
-
 #endif

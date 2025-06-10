@@ -1,4 +1,7 @@
 #include "AP_InertialSensor_ROS.h"
+
+#if AP_INS_ROS_ENABLED
+
 #include <AP_HAL/AP_HAL.h>
 
 #include <vector>
@@ -67,3 +70,4 @@ AP_InertialSensor_Backend* AP_InertialSensor_ROS::probe(AP_InertialSensor &imu, 
     AP_InertialSensor_ROS* sensor = NEW_NOTHROW AP_InertialSensor_ROS(imu, rotation);
     return sensor;
 }
+#endif

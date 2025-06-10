@@ -1,10 +1,9 @@
 #pragma once
 #include "AP_Compass_Backend.h"
 
-#include <bridge_node.hpp>
-
 #if AP_COMPASS_ROS_ENABLED
 
+#include <bridge_node.hpp>
 #include <AP_HAL/AP_HAL.h>
 
 class AP_Compass_ROS : public AP_Compass_Backend {

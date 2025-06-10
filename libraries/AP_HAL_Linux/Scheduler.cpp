@@ -163,7 +163,7 @@ void Scheduler::microsleep(uint32_t usec)
 {
     struct timespec ts;
     ts.tv_sec = 0;
-    ts.tv_nsec = usec*1000UL;
+    ts.tv_nsec = usec*1000UL/SPEED_UP;
     while (nanosleep(&ts, &ts) == -1 && errno == EINTR) ;
 }
 

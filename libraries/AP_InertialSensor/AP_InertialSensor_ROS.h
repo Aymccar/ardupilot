@@ -1,8 +1,9 @@
 #pragma once
 #include "AP_InertialSensor.h"
 #include "AP_InertialSensor_Backend.h"
-
 #include <vector>
+
+#if AP_INS_ROS_ENABLED 
 
 #include <bridge_node.hpp>
 
@@ -25,4 +26,4 @@ private:
 
     static uint8_t bus_id;
 };
-
+#endif
