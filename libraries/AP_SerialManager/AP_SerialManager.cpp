@@ -533,6 +533,11 @@ void AP_SerialManager::init()
                                      AP_SERIALMANAGER_ORIENTUS_BUFSIZE_RX,
                                      AP_SERIALMANAGER_ORIENTUS_BUFSIZE_TX);
                 break;
+                case SerialProtocol_Dev:
+                    uart->begin(state[i].baudrate(),
+                                    AP_SERIALMANAGER_Dev_BUFSIZE_RX,
+                                    AP_SERIALMANAGER_Dev_BUFSIZE_TX);
+                break;
                 
 #if AP_RCPROTOCOL_ENABLED
                 case SerialProtocol_RCIN:
